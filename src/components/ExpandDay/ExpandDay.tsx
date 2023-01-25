@@ -1,11 +1,11 @@
 import styles from "./ExpandDay.module.scss";
-export const ExpandDay = () => {
+export const ExpandDay = (props: {date: number, day: string}) => {
     return (
         <>
             <div className={styles.expand_day}>
                 <div className={styles.date}>
-                    <h2>24</h2>
-                    <h3>Saturday</h3>
+                    <h2>{props.date}</h2>
+                    <h3>{props.day}</h3>
                 </div>
                 <div className={styles.info}>
                     <div>10:03AM</div>

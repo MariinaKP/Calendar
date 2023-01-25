@@ -37,20 +37,21 @@
 
   .days {
     & li.inactive {
-      color: var($c-grey);
+      //color: var($c-grey);
+      color: #0b1ed5;
     }
 
-    & li::before {
-      position: absolute;
-      content: "";
-      left: 50%;
-      top: 50%;
-      height: 40px;
-      width: 40px;
-      z-index: -1;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
+    //& li::before {
+    //  position: absolute;
+    //  content: "";
+    //  left: 50%;
+    //  top: 50%;
+    //  height: 40px;
+    //  width: 40px;
+    //  z-index: -1;
+    //  border-radius: 50%;
+    //  transform: translate(-50%, -50%);
+    //}
   }
 
   .month_title {
@@ -63,5 +64,8 @@
     cursor: pointer;
   }
 
+  .selected_day {
+    background: red;
+  }
 }
 

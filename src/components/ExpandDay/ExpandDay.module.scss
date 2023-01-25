@@ -1,0 +1,19 @@
+@import '../../styles/main.scss';
+
+.expand_day {
+  height: 550px;
+  padding: 100px 80px;
+  background: coral;
+  border-radius: 0 50px 50px 0;
+
+  .date {
+    text-align: right;
+  }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+

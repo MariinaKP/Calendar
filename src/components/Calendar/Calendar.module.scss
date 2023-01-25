@@ -1,0 +1,67 @@
+@import '../../styles/main.scss';
+
+.calendar_wrapper {
+  .calendar {
+    width: 570px;
+
+    & ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      text-align: center;
+    }
+
+    & li {
+      color: #333;
+      width: calc(100% / 7);
+      font-size: 0.7rem;
+    }
+    & .weeks li {
+      font-weight: bold;
+    }
+  }
+
+  .calendar .days {
+    margin-bottom: 20px;
+
+    & li {
+      z-index: 1;
+      height: 70px;
+      cursor: pointer;
+      position: relative;
+      margin-top: 10px;
+    }
+  }
+
+  .days {
+    & li.inactive {
+      color: var($c-grey);
+    }
+
+    & li::before {
+      position: absolute;
+      content: "";
+      left: 50%;
+      top: 50%;
+      height: 40px;
+      width: 40px;
+      z-index: -1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .month_title {
+    display: flex;
+  }
+
+  .arrow {
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
+}
+

@@ -1,0 +1,32 @@
+@import '../../styles/main.scss';
+
+.form {
+  background: $c-white;
+  border-radius: 30px;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  .field {
+    width: 100%;
+    border: 2px solid $c-grey;
+    border-radius: 20px;
+    padding: 5px 15px;
+    outline: none;
+    transition: all $t-duration;
+    margin-bottom: 1rem;
+
+    &:focus {
+      border: 2px solid $c-main;
+    }
+  }
+
+  &_btn {
+    width: 100px;
+  }
+}

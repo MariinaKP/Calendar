@@ -4,16 +4,36 @@
   width: 350px;
   height: 550px;
   padding: 100px 80px;
-  background: coral;
+  background: $c-main;
   border-radius: 0 50px 50px 0;
+  display: flex;
+  flex-direction: column;
 
   .date {
     text-align: right;
+    border-bottom: 1px solid $c-black;
   }
 
   .info {
     display: flex;
     justify-content: space-between;
+    margin: 0.5rem 0;
+    font-size: 14px;
+  }
+  .tasks {
+    &_add {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+
+    }
+    &_icon {
+      font-size: 20px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
   }
 }
 

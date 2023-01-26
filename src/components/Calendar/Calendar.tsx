@@ -106,7 +106,6 @@ export const Calendar = () => {
                 </div>
             </div>
             <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]}/>
-            {/*TODO icons css*/}
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>

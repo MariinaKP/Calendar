@@ -3,6 +3,7 @@
 .calendar_wrapper {
   .calendar {
     width: 570px;
+    margin-right: 1rem;
 
     ul {
       margin: 0;
@@ -19,8 +20,9 @@
       font-size: 0.7rem;
     }
 
-    .weeks li {
+    & .weeks li {
       font-weight: bold;
+      color: $c-main;
     }
   }
 
@@ -29,46 +31,57 @@
 
     li {
       z-index: 1;
-      height: 70px;
+      height: 80px;
       cursor: pointer;
       position: relative;
       margin-top: 10px;
+      padding: 5px;
+      font-size: 14px;
     }
   }
 
   .days {
-    li.inactive {
-      //color: var($c-grey);
-      color: #0b1ed5;
+    & li.inactive {
+      color: $c-main;
     }
 
-    li:hover {
-      background: #d48df8;
-      width: 1.2rem;
-      height: 1.2rem;
-      display: flex;
-      margin: 0 auto;
-      border-radius: 50%;
-      justify-content: center;
-      align-items: center;
+    :hover {
+      background: $c-main-light;
+      border-radius: 10px;
     }
-
-    .month_title {
-      display: flex;
+    .task {
+      padding: 5px;
+      /* width: 100%; */
+      background: $c-main-dark;
+      margin: 5px auto 0 auto;
+      border-radius: 10px;
     }
+  }
 
+  .month_title {
+    display: flex;
+    color: $c-main-dark;
 
-
-    .selected_day {
-      background: #d48df8;
-      width: 1.2rem;
-      height: 1.2rem;
-      display: flex;
-      margin: 0 auto;
-      border-radius: 50%;
-      justify-content: center;
-      align-items: center;
+    & span {
+      font-weight: bold;
+      margin-right: .5rem;
     }
+  }
+
+  .selected_day {
+    background: $c-main-light;
+    border-radius: 10px;
+  }
+
+  .current_day {
+    background: #0C8282;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto;
   }
 
 }

@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {ExpandDay} from "../ExpandDay/ExpandDay";
+import holidays from 'date-holidays';
 import {icons} from "../../assets/icons";
 import styles from "./Calendar.module.scss";
 
@@ -46,6 +47,13 @@ export const Calendar = () => {
     }
 
     renderCalendar();
+    const hd = new holidays('BG');
+    const holiday = hd.getHolidays();
+
+    console.log(holiday);
+    console.log(holiday[0].date);
+
+
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -53,7 +61,7 @@ export const Calendar = () => {
             />
             <div className={styles.calendar_wrapper}>
                 <div className={styles.month_title}>
-                    <h3>{`${months[selectedMonth]} ${selectedYear}`}</h3>
+                    <h3><span>{months[selectedMonth]}</span>{selectedYear}</h3>
                 </div>
                 <div className={styles.calendar}>
                     <ul className={styles.weeks}>
@@ -72,10 +80,13 @@ export const Calendar = () => {
                                 let nextMonth = index > prevLastDayIndex + lastDay; // sets boolean which checks if the day from the days[] that are from the next month
                                 let inactiveClass = prevMonth || nextMonth ? `${styles.inactive}` : ''; // sets classname to the days that are not from the selected month
                                 let selectedDayClass = (!prevMonth && !nextMonth) && day === selectedDay.date ? `${styles.selected_day}` : ''; // sets classname to the day that has been selected
+                                let currentDayClass = (!prevMonth && !nextMonth) && day === new Date().getDate() ? `${styles.current_day}` : ''; // sets classname to the day that has been selected
+
+                                console.log(`${selectedYear}-${selectedMonth + 1}-${day}`);
 
                                 return (
                                     <li
-                                        className={`${inactiveClass}`}
+                                        className={`${inactiveClass} ${selectedDayClass}`}
                                         onClick={() => {
                                             let selectedDayIndex = new Date(selectedYear, selectedMonth, day).getDay(); // is used to define the day of the week
 
@@ -94,10 +105,11 @@ export const Calendar = () => {
                                         }}
                                     >
                                         <span
-                                            className={`${selectedDayClass}`}
+                                            className={`${currentDayClass}`}
                                         >
                                             {day}
                                         </span>
+                                        <p className={styles.task}></p>
                                     </li>
                                 )
                             })

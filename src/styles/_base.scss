@@ -19,12 +19,12 @@ html {
 }
 
 body {
-  background-color: #f5f5f5;
+  background-color: $c-grey;
   font-family: $ff-main;
   font-weight: $font-weight-base;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  color: #000;
+  color: $c-black;
   display: flex;
   align-items: center;
   justify-content: center;

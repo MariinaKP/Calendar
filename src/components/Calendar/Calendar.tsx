@@ -47,12 +47,8 @@ export const Calendar = () => {
     }
 
     renderCalendar();
-    const hd = new holidays('BG');
-    const holiday = hd.getHolidays();
-
-    console.log(holiday);
-    console.log(holiday[0].date);
-
+    const bgHolidays = new holidays('BG');
+    const holiday = bgHolidays.getHolidays();
 
     return (
         <>
@@ -76,13 +72,11 @@ export const Calendar = () => {
                     <ul className={styles.days}>
                         {
                             days.map((day, index) => {
-                                let prevMonth = index <= prevLastDayIndex; // sets boolean which checks if the day from the days[] that are from the prev month
-                                let nextMonth = index > prevLastDayIndex + lastDay; // sets boolean which checks if the day from the days[] that are from the next month
+                                let prevMonth = index <= prevLastDayIndex; // sets boolean which checks if the day from the days[] is from the prev month
+                                let nextMonth = index > prevLastDayIndex + lastDay; // sets boolean which checks if the day from the days[] is from the next month
                                 let inactiveClass = prevMonth || nextMonth ? `${styles.inactive}` : ''; // sets classname to the days that are not from the selected month
                                 let selectedDayClass = (!prevMonth && !nextMonth) && day === selectedDay.date ? `${styles.selected_day}` : ''; // sets classname to the day that has been selected
-                                let currentDayClass = (!prevMonth && !nextMonth) && day === new Date().getDate() ? `${styles.current_day}` : ''; // sets classname to the day that has been selected
-
-                                console.log(`${selectedYear}-${selectedMonth + 1}-${day}`);
+                                let currentDayClass = (!prevMonth && !nextMonth) && ((day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)) ? `${styles.current_day}` : ''; // sets classname to the today's day
 
                                 return (
                                     <li

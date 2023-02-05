@@ -83,8 +83,16 @@
     }
 
     .current_day {
-      background: #0C8282;
+      background: $c-main-dark;
       color: $c-grey;
+    }
+
+    .star {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      font-size: 12px;
+      color: $c-main;
     }
   }
 

@@ -7,6 +7,7 @@ import styles from "./Calendar.module.scss";
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());
     const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()});
+    const [holiday, setHoliday] = useState('');
     let selectedYear = date.getFullYear();
     let selectedMonth = date.getMonth();
 
@@ -16,8 +17,8 @@ export const Calendar = () => {
     type DaysType = {
         day: number;
         month: number;
-        holidays?: string[];
-        tasks?: [{title: string; description: string}]
+        holiday?: string;
+        tasks?: [{ title: string; description: string }]
     };
 
     const days: DaysType[] = [];
@@ -27,6 +28,9 @@ export const Calendar = () => {
     let firstDayIndex: number;
     let prevLastDay: number;
     let prevLastDayIndex: number;
+
+    const bgHolidays = new holidays('BG');
+    const allHolidays = bgHolidays.getHolidays();
 
     function renderCalendar() {
         lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
@@ -38,24 +42,28 @@ export const Calendar = () => {
         addPrevMonthDays(prevLastDay);
         addSelectedMonthDays(lastDay);
         addNextMonthDays();
+        addHolidays();
     }
+
     renderCalendar();
 
-    function addPrevMonthDays(prevLastDay:number) {
+    function addPrevMonthDays(prevLastDay: number) {
         let firstDayOfWeek = prevLastDayIndex;
         prevLastDay -= prevLastDayIndex;
 
         for (let i = 0; i <= firstDayOfWeek; i++) {
-            const day = {day: prevLastDay++, month: selectedMonth === 0 ? 11 : selectedMonth - 1 }
+            const day = {day: prevLastDay++, month: selectedMonth === 0 ? 11 : selectedMonth - 1}
             days.push(day);
         }
     }
-    function addSelectedMonthDays(lastDay:number) {
+
+    function addSelectedMonthDays(lastDay: number) {
         for (let i = 1; i <= lastDay; i++) {
             const day = {day: i, month: selectedMonth}
             days.push(day);
         }
     }
+
     function addNextMonthDays() {
         let daysLength = days.length;
 
@@ -64,38 +72,20 @@ export const Calendar = () => {
             days.push(day);
         }
     }
-    const bgHolidays = new holidays('BG');
-    const allHolidays  = bgHolidays.getHolidays();
 
-    // type HolidaysType = [
-    //         { month: number; holidays: [
-    //                 { day: number; name: string; }
-    //             ]; }
-    //     ];
-    //
-    // const monthsWithHolidays = {
-    // };
-    //
+    function addHolidays() {
+        allHolidays.forEach((x) => {
+            const currMonth = x.start.getMonth();
+            const currDay = x.start.getDate();
+            const name = x.name;
 
-    allHolidays.forEach((x) => {
-        const currMonth = x.start.getMonth();
-        const currDay = x.start.getDate();
-        const name = x.name;
-
-        days.forEach((y) => {
-           if (y.day === currDay && y.month === currMonth ) {
-               y.holidays = [name];
-               console.log(y);
-               console.log(currDay);
-               console.log(currMonth);
-           }
-
+            days.forEach((y) => {
+                if (y.day === currDay && y.month === currMonth) {
+                    y.holiday = name;
+                }
+            });
         });
-    });
-
-    console.log(allHolidays);
-
-    console.log(days);
+    }
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -116,49 +106,63 @@ export const Calendar = () => {
                         <li>Sat</li>
                     </ul>
                     <ul className={styles.days}>
-                        {/*{days.map((day) =>*/}
-                        {/*    <li>{day.day}</li>*/}
-                        {/*)}*/}
                         {
-                            days.map((day, index) => {
+                            days.map((day) => {
                                 let prevMonth = false;
                                 let nextMonth = false;
-                                if (day.month !== selectedMonth ) {
+                                if (day.month !== selectedMonth) {
                                     if (day.month === selectedMonth + 1) nextMonth = true;
                                     prevMonth = true;
                                 }
-                                // let prevMonth = index <= prevLastDayIndex; // sets boolean which checks if the day from the days[] is from the prev month
-                                // let nextMonth = index > prevLastDayIndex + lastDay; // sets boolean which checks if the day from the days[] is from the next month
-                                let inactiveClass = prevMonth || nextMonth ? `${styles.inactive}` : ''; // sets classname to the days that are not from the selected month
-                                let selectedDayClass = (!prevMonth && !nextMonth) && day.day === selectedDay.date ? `${styles.selected_day}` : ''; // sets classname to the day that has been selected
-                                let currentDayClass = (!prevMonth && !nextMonth) && ((day.day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)) ? `${styles.current_day}` : ''; // sets classname to the today's day
+
+                                function setSelectedDayAndDate() {
+                                    let selectedDayIndex = new Date(selectedYear, selectedMonth, day.day).getDay();
+
+                                    // if day from the next month is clicked, the selected month is updated to be that month
+                                    if (prevMonth) {
+                                        setDate(new Date(selectedYear, selectedMonth - 1, day.day));
+                                        selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day.day).getDay();
+                                    }
+
+                                    // if day from the prev month is clicked, the selected month is updated to be that month
+                                    if (nextMonth) {
+                                        setDate(new Date(selectedYear, selectedMonth + 1, day.day));
+                                        selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day.day).getDay();
+                                    }
+                                    setSelectedDay({date: day.day, day: selectedDayIndex})
+                                }
+
+                                function setClassToInactiveDay() {
+                                    if (prevMonth || nextMonth) return `${styles.inactive}`;
+                                }
+
+                                function setClassToSelectedDay() {
+                                    if (!prevMonth && !nextMonth && day.day === selectedDay.date) return `${styles.selected_day}`;
+                                }
+
+                                function setClassToCurrentDay() {
+                                    if ((!prevMonth && !nextMonth) && ((day.day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)))
+                                        return `${styles.current_day}`;
+                                }
+
+                                function setDaysWithHolidays() {
+                                    if (day.holiday !== undefined) {
+                                        return <icons.AiFillStar className={styles.star}/>;
+                                    }
+                                }
 
                                 return (
                                     <li
-                                        className={`${inactiveClass} ${selectedDayClass}`}
-                                        onClick={() => {
-                                            let selectedDayIndex = new Date(selectedYear, selectedMonth, day.day).getDay(); // is used to define the day of the week
-
-                                            // if day from the next month is clicked, the selected month is updated to be that month
-                                            if (prevMonth) {
-                                                setDate(new Date(selectedYear, selectedMonth - 1, day.day));
-                                                selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day.day).getDay();
-                                            }
-
-                                            // if day from the prev month is clicked, the selected month is updated to be that month
-                                            if (nextMonth) {
-                                                setDate(new Date(selectedYear, selectedMonth + 1, day.day));
-                                                selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day.day).getDay();
-                                            }
-                                            setSelectedDay({date: day.day, day: selectedDayIndex})
-                                        }}
+                                        className={`${setClassToInactiveDay()} ${setClassToSelectedDay()}`}
+                                        onClick={() => setSelectedDayAndDate()}
                                     >
                                         <span
-                                            className={`${currentDayClass}`}
+                                            className={`${setClassToCurrentDay()}`}
                                         >
+                                            {setDaysWithHolidays()}
                                             {day.day}
                                         </span>
-                                        <p className={styles.task}></p>
+                                        {/*<p className={styles.task}></p>*/}
                                     </li>
                                 )
                             })
@@ -166,7 +170,7 @@ export const Calendar = () => {
                     </ul>
                 </div>
             </div>
-            <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]}/>
+            <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]} />
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>

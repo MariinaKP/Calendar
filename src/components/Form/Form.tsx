@@ -1,25 +1,10 @@
 import styles from "./Form.module.scss";
-import {Backdrop} from "../Modal/Backdrop";
 
 type Props = {
     title: string;
     button: string;
     children?: React.ReactNode;
 };
-
-/*
-export const Form = () => {
-    return (
-        <form className={styles.form}>
-            <h4>Add Task</h4>
-            <input className={styles.field} type={"text"} placeholder={"Title"} required/>
-            <textarea className={styles.field} placeholder={"Description"}/>
-            <input className={`${styles.form_btn} btn`} type={"submit"}/>
-        </form>
-    );
-}
-*/
-
 
 export const Form = ({ title, button, children }: Props) => {
     return (

@@ -2,6 +2,7 @@ import React from 'react';
 import "./styles/main.scss";
 import {Calendar} from "./components/Calendar/Calendar";
 import {Login} from "./components/Login/Login";
+import {Register} from "./components/Register/Register";
 
 function App() {
     return (
@@ -9,9 +10,11 @@ function App() {
             <div className={'wrapper'}>
                 <Calendar/>
             </div>
-            <Login/>
+            <div className={'auth'}>
+                <Register />
+                <Login />
+            </div>
         </>
-
     );
 }
 

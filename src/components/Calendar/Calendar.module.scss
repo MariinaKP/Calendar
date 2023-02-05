@@ -73,6 +73,12 @@
     }
 
     span {
+
+    }
+
+    .current_day {
+      background: $c-main-dark;
+      color: $c-grey;
       width: 25px;
       height: 25px;
       display: flex;
@@ -80,11 +86,6 @@
       justify-content: center;
       border-radius: 50%;
       margin: 0 auto;
-    }
-
-    .current_day {
-      background: $c-main-dark;
-      color: $c-grey;
     }
 
     .star {

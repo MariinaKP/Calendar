@@ -86,6 +86,43 @@ export const Calendar = () => {
             });
         });
     }
+
+    function setSelectedDayAndDate(prevMonth: boolean, nextMonth: boolean, day: number) {
+        let selectedDayIndex = new Date(selectedYear, selectedMonth, day).getDay();
+
+        // if day from the next month is clicked, the selected month is updated to be that month
+        if (prevMonth) {
+            setDate(new Date(selectedYear, selectedMonth - 1, day));
+            selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day).getDay();
+        }
+
+        // if day from the prev month is clicked, the selected month is updated to be that month
+        if (nextMonth) {
+            setDate(new Date(selectedYear, selectedMonth + 1, day));
+            selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day).getDay();
+        }
+        setSelectedDay({date: day, day: selectedDayIndex})
+    }
+
+    function setClassToInactiveDay(prevMonth: boolean, nextMonth: boolean) {
+        if (prevMonth || nextMonth) return `${styles.inactive}`;
+    }
+
+    function setClassToSelectedDay(prevMonth: boolean, nextMonth: boolean, day: number) {
+        if (!prevMonth && !nextMonth && day === selectedDay.date) return `${styles.selected_day}`;
+    }
+
+    function setClassToCurrentDay(prevMonth: boolean, nextMonth: boolean, day: number) {
+        if ((!prevMonth && !nextMonth) && ((day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)))
+            return `${styles.current_day}`;
+    }
+
+    function setDaysWithHolidays(holiday?: string) {
+        if (holiday !== undefined) {
+            return <icons.AiFillStar className={styles.star}/>;
+        }
+    }
+
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -115,56 +152,20 @@ export const Calendar = () => {
                                     prevMonth = true;
                                 }
 
-                                function setSelectedDayAndDate() {
-                                    let selectedDayIndex = new Date(selectedYear, selectedMonth, day.day).getDay();
-
-                                    // if day from the next month is clicked, the selected month is updated to be that month
-                                    if (prevMonth) {
-                                        setDate(new Date(selectedYear, selectedMonth - 1, day.day));
-                                        selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day.day).getDay();
-                                    }
-
-                                    // if day from the prev month is clicked, the selected month is updated to be that month
-                                    if (nextMonth) {
-                                        setDate(new Date(selectedYear, selectedMonth + 1, day.day));
-                                        selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day.day).getDay();
-                                    }
-                                    setSelectedDay({date: day.day, day: selectedDayIndex})
-                                }
-
-                                function setClassToInactiveDay() {
-                                    if (prevMonth || nextMonth) return `${styles.inactive}`;
-                                }
-
-                                function setClassToSelectedDay() {
-                                    if (!prevMonth && !nextMonth && day.day === selectedDay.date) return `${styles.selected_day}`;
-                                }
-
-                                function setClassToCurrentDay() {
-                                    if ((!prevMonth && !nextMonth) && ((day.day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)))
-                                        return `${styles.current_day}`;
-                                }
-
-                                function setDaysWithHolidays() {
-                                    if (day.holiday !== undefined) {
-                                        return <icons.AiFillStar className={styles.star}/>;
-                                    }
-                                }
-
                                 return (
                                     <li
-                                        className={`${setClassToInactiveDay()} ${setClassToSelectedDay()}`}
-                                        onClick={() => setSelectedDayAndDate()}
+                                        className={`${setClassToInactiveDay(prevMonth, nextMonth)} ${setClassToSelectedDay(prevMonth, nextMonth, day.day)}`}
+                                        onClick={() => setSelectedDayAndDate(prevMonth, nextMonth, day.day)}
                                     >
                                         <span
-                                            className={`${setClassToCurrentDay()}`}
+                                            className={`${setClassToCurrentDay(prevMonth, nextMonth, day.day)}`}
                                         >
-                                            {setDaysWithHolidays()}
+                                            {setDaysWithHolidays(day.holiday)}
                                             {day.day}
                                         </span>
-                                        {/*<p className={styles.task}></p>*/}
+                                        <p className={styles.task}></p>
                                     </li>
-                                )
+                                );
                             })
                         }
                     </ul>

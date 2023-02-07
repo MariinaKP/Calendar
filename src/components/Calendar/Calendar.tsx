@@ -1,8 +1,13 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {ExpandDay} from "../ExpandDay/ExpandDay";
 import holidays from 'date-holidays';
 import {icons} from "../../assets/icons";
 import styles from "./Calendar.module.scss";
+import {db} from "../../firebase-config";
+import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {AuthContext} from "../../AuthContext";
+
+
 
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());
@@ -10,6 +15,7 @@ export const Calendar = () => {
     const [holiday, setHoliday] = useState('');
     let selectedYear = date.getFullYear();
     let selectedMonth = date.getMonth();
+    const {currentUser} = useContext(AuthContext);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -123,6 +129,15 @@ export const Calendar = () => {
         }
     }
 
+    async function fetchingTasks() {
+        const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/tasks`));
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    }
+
+    fetchingTasks();
+
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -163,7 +178,7 @@ export const Calendar = () => {
                                             {setDaysWithHolidays(day.holiday)}
                                             {day.day}
                                         </span>
-                                        <p className={styles.task}></p>
+                                        {/*<p className={styles.task}></p>*/}
                                     </li>
                                 );
                             })

@@ -1,10 +1,22 @@
 import {icons} from "../../assets/icons";
 import {Modal} from "../Modal/Modal";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Form} from "../Form/Form";
 import styles from "./ExpandDay.module.scss";
 import stylesForm from "../Form/Form.module.scss";
+import {doc, setDoc, addDoc} from "firebase/firestore";
+import {db} from "../../firebase-config";
+import {AuthContext} from "../../AuthContext";
+import { collection } from "firebase/firestore";
 
+
+//Use one which works fine for you
+
+import * as firebase from "firebase/app";
+// import * as firebase from 'firebase';
+
+//Now import this
+import 'firebase/firestore';
 
 type Props = {
     date: number;
@@ -12,11 +24,36 @@ type Props = {
     holiday?: string;
 }
 export const ExpandDay = ({ date, day, holiday}:Props) => {
-    // if (props.holiday !== undefined) {
-    //     <p>props.name</p>
-    // }
     const [isOpened, setIsOpened] = useState(false);
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskDesc, setTaskDesc] = useState('');
+    const [taskIsDone, setTaskIsDone] = useState(false);
+    const {currentUser} = useContext(AuthContext);
 
+
+    const addTask = async (e: any): Promise<void> => {
+        e.preventDefault();
+
+        // TODO diff between setDoc and addDoc
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await setDoc(userDocRef, {
+            email: currentUser.email
+        });
+
+        await addDoc(collection(db, `users/${currentUser.uid}/tasks`), {
+            title: taskTitle,
+            description: taskDesc,
+            isDone: false
+        });
+
+        // const taskDocRef = doc(db, `users/${currentUser.uid}/tasks`);
+        // await addDoc(taskDocRef, {
+        //     title: taskTitle,
+        //     description: taskDesc,
+        //     isDone: false
+        // });
+    }
+    console.log(taskTitle);
     return (
         <>
             <div className={styles.expand_day}>
@@ -41,9 +78,9 @@ export const ExpandDay = ({ date, day, holiday}:Props) => {
             </div>
             {isOpened && (
                 <Modal onClose={() => setIsOpened(false)}>
-                    <Form title={'Add Task'} button={'Submit'}>
-                        <input className={stylesForm.field} type={"text"} placeholder={"Title"} required/>
-                        <textarea className={stylesForm.field} placeholder={"Description"}/>
+                    <Form title={'Add Task'} button={'Submit'} onClick={addTask}>
+                        <input className={stylesForm.field} type={"text"} placeholder={"Title"} required onChange={(e) => setTaskTitle(e.target.value)}/>
+                        <textarea className={stylesForm.field} placeholder={"Description"} onChange={(e) => setTaskDesc(e.target.value)}/>
                     </Form>
                 </Modal>
             )}

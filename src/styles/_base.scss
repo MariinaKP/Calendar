@@ -46,6 +46,12 @@ body {
   font-size: 14px;
 }
 
+.error {
+  display: flex;
+  justify-content: center;
+  color: $c-red;
+  margin-bottom: 1rem;
+}
 a {
   color: inherit;
   text-decoration: none;

@@ -11,6 +11,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "date-holidays": "^3.16.15",
+    "firebase": "^9.17.1",
     "holidayapi": "^6.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.8.0"
   }
 }

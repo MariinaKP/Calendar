@@ -163,7 +163,7 @@ export const Calendar = () => {
                                             {setDaysWithHolidays(day.holiday)}
                                             {day.day}
                                         </span>
-                                        <p className={styles.task}></p>
+                                        {/*<p className={styles.task}></p>*/}
                                     </li>
                                 );
                             })

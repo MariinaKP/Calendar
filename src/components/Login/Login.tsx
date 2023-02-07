@@ -5,9 +5,6 @@ import styles from "./Login.module.scss";
 import stylesForm from "../Form/Form.module.scss";
 import { signInWithEmailAndPassword, getAuth, signOut} from 'firebase/auth';
 import { auth } from '../../firebase-config';
-import { db } from '../../firebase-config';
-import { doc, setDoc } from "firebase/firestore";
-import {AuthContext} from "../../AuthContext";
 
 export const Login = () => {
     const [isOpened, setIsOpened] = useState(false);

@@ -4,7 +4,7 @@ import holidays from 'date-holidays';
 import {icons} from "../../assets/icons";
 import styles from "./Calendar.module.scss";
 import {db} from "../../firebase-config";
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, getDocs} from "firebase/firestore";
 import {AuthContext} from "../../AuthContext";
 
 
@@ -135,7 +135,6 @@ export const Calendar = () => {
             console.log(doc.id, " => ", doc.data());
         });
     }
-
     fetchingTasks();
 
     return (

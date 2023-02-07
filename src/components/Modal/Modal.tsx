@@ -1,4 +1,4 @@
-import classes from "./Modal.module.scss";
+import styles from "./Modal.module.scss";
 import { Backdrop } from "./Backdrop";
 
 type Props = {
@@ -11,7 +11,7 @@ export const Modal = ({ onClose, onClick, children }: Props) => {
   return (
     <>
       <Backdrop onClose={onClose} />
-      <div onClick={onClick} className={classes.modal}>
+      <div onClick={onClick} className={styles.modal}>
         {children}
       </div>
     </>

@@ -5,50 +5,123 @@ import {icons} from "../../assets/icons";
 import styles from "./Calendar.module.scss";
 
 export const Calendar = () => {
-    const [date, setDate] = useState(new Date()); // fetching today's date
-    const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()}); // sets default selectedDay to be today's date
-    let selectedYear = date.getFullYear(); // sets the default value of selectedYear to be current year
-    let selectedMonth = date.getMonth(); // sets the default value of selectedMonth to be current month
+    const [date, setDate] = useState(new Date());
+    const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()});
+    const [holiday, setHoliday] = useState('');
+    let selectedYear = date.getFullYear();
+    let selectedMonth = date.getMonth();
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const days: number[] = []; // array storing the days that are rendered
 
-    // is going to be used to fill days[] (array) with the days of the current month
+    type DaysType = {
+        day: number;
+        month: number;
+        holiday?: string;
+        tasks?: [{ title: string; description: string }]
+    };
+
+    const days: DaysType[] = [];
+
     let lastDay: number;
-
-    // prevLastDayIndex is used to calculate how many days we are going to add to days[] (array),
-    // by subtracting from the last day of the prev month (prevLastDay) that amount
+    let lastDayIndex: number;
+    let firstDayIndex: number;
     let prevLastDay: number;
     let prevLastDayIndex: number;
 
+    const bgHolidays = new holidays('BG');
+    const allHolidays = bgHolidays.getHolidays();
+
     function renderCalendar() {
-        lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate(); // sets lastDay to be the last day of the current month
-        prevLastDay = new Date(selectedYear, selectedMonth, 0).getDate(); // sets prevLastDay to be the last day of the prev month
-        prevLastDayIndex = new Date(selectedYear, selectedMonth, 0).getDay(); // sets the index which is used to define the day of the week
-        let firstDayOfWeek = prevLastDayIndex;
-        prevLastDay -= prevLastDayIndex;
+        lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+        lastDayIndex = new Date(selectedYear, selectedMonth + 1, 0).getDay();
+        firstDayIndex = new Date(selectedYear, selectedMonth + 1, 1).getDay();
+        prevLastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+        prevLastDayIndex = new Date(selectedYear, selectedMonth, 0).getDay();
 
-        // pushing the days from the prev month to the days[]
-        for (let i = 0; i <= firstDayOfWeek; i++) {
-            days.push(prevLastDay++);
-        }
-
-        // pushing the days from the selected month to the days[]
-        for (let i = 1; i <= lastDay; i++) {
-            days.push(i);
-        }
-
-        let daysLength = days.length;
-        // pushing the days from the next month to the days[]
-        for (let i = 1; i <= 42 - daysLength; i++) {
-            days.push(i);
-        }
+        addPrevMonthDays(prevLastDay);
+        addSelectedMonthDays(lastDay);
+        addNextMonthDays();
+        addHolidays();
     }
 
     renderCalendar();
-    const bgHolidays = new holidays('BG');
-    const holiday = bgHolidays.getHolidays();
+
+    function addPrevMonthDays(prevLastDay: number) {
+        let firstDayOfWeek = prevLastDayIndex;
+        prevLastDay -= prevLastDayIndex;
+
+        for (let i = 0; i <= firstDayOfWeek; i++) {
+            const day = {day: prevLastDay++, month: selectedMonth === 0 ? 11 : selectedMonth - 1}
+            days.push(day);
+        }
+    }
+
+    function addSelectedMonthDays(lastDay: number) {
+        for (let i = 1; i <= lastDay; i++) {
+            const day = {day: i, month: selectedMonth}
+            days.push(day);
+        }
+    }
+
+    function addNextMonthDays() {
+        let daysLength = days.length;
+
+        for (let i = 1; i <= 42 - daysLength; i++) {
+            const day = {day: i, month: selectedMonth + 1}
+            days.push(day);
+        }
+    }
+
+    function addHolidays() {
+        allHolidays.forEach((x) => {
+            const currMonth = x.start.getMonth();
+            const currDay = x.start.getDate();
+            const name = x.name;
+
+            days.forEach((y) => {
+                if (y.day === currDay && y.month === currMonth) {
+                    y.holiday = name;
+                }
+            });
+        });
+    }
+
+    function setSelectedDayAndDate(prevMonth: boolean, nextMonth: boolean, day: number) {
+        let selectedDayIndex = new Date(selectedYear, selectedMonth, day).getDay();
+
+        // if day from the next month is clicked, the selected month is updated to be that month
+        if (prevMonth) {
+            setDate(new Date(selectedYear, selectedMonth - 1, day));
+            selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day).getDay();
+        }
+
+        // if day from the prev month is clicked, the selected month is updated to be that month
+        if (nextMonth) {
+            setDate(new Date(selectedYear, selectedMonth + 1, day));
+            selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day).getDay();
+        }
+        setSelectedDay({date: day, day: selectedDayIndex})
+    }
+
+    function setClassToInactiveDay(prevMonth: boolean, nextMonth: boolean) {
+        if (prevMonth || nextMonth) return `${styles.inactive}`;
+    }
+
+    function setClassToSelectedDay(prevMonth: boolean, nextMonth: boolean, day: number) {
+        if (!prevMonth && !nextMonth && day === selectedDay.date) return `${styles.selected_day}`;
+    }
+
+    function setClassToCurrentDay(prevMonth: boolean, nextMonth: boolean, day: number) {
+        if ((!prevMonth && !nextMonth) && ((day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)))
+            return `${styles.current_day}`;
+    }
+
+    function setDaysWithHolidays(holiday?: string) {
+        if (holiday !== undefined) {
+            return <icons.AiFillStar className={styles.star}/>;
+        }
+    }
 
     return (
         <>
@@ -71,47 +144,34 @@ export const Calendar = () => {
                     </ul>
                     <ul className={styles.days}>
                         {
-                            days.map((day, index) => {
-                                let prevMonth = index <= prevLastDayIndex; // sets boolean which checks if the day from the days[] is from the prev month
-                                let nextMonth = index > prevLastDayIndex + lastDay; // sets boolean which checks if the day from the days[] is from the next month
-                                let inactiveClass = prevMonth || nextMonth ? `${styles.inactive}` : ''; // sets classname to the days that are not from the selected month
-                                let selectedDayClass = (!prevMonth && !nextMonth) && day === selectedDay.date ? `${styles.selected_day}` : ''; // sets classname to the day that has been selected
-                                let currentDayClass = (!prevMonth && !nextMonth) && ((day === new Date().getDate()) && (new Date().getMonth() === selectedMonth)) ? `${styles.current_day}` : ''; // sets classname to the today's day
+                            days.map((day) => {
+                                let prevMonth = false;
+                                let nextMonth = false;
+                                if (day.month !== selectedMonth) {
+                                    if (day.month === selectedMonth + 1) nextMonth = true;
+                                    prevMonth = true;
+                                }
 
                                 return (
                                     <li
-                                        className={`${inactiveClass} ${selectedDayClass}`}
-                                        onClick={() => {
-                                            let selectedDayIndex = new Date(selectedYear, selectedMonth, day).getDay(); // is used to define the day of the week
-
-                                            // if day from the next month is clicked, the selected month is updated to be that month
-                                            if (prevMonth) {
-                                                setDate(new Date(selectedYear, selectedMonth - 1, day));
-                                                selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day).getDay();
-                                            }
-
-                                            // if day from the prev month is clicked, the selected month is updated to be that month
-                                            if (nextMonth) {
-                                                setDate(new Date(selectedYear, selectedMonth + 1, day));
-                                                selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day).getDay();
-                                            }
-                                            setSelectedDay({date: day, day: selectedDayIndex})
-                                        }}
+                                        className={`${setClassToInactiveDay(prevMonth, nextMonth)} ${setClassToSelectedDay(prevMonth, nextMonth, day.day)}`}
+                                        onClick={() => setSelectedDayAndDate(prevMonth, nextMonth, day.day)}
                                     >
                                         <span
-                                            className={`${currentDayClass}`}
+                                            className={`${setClassToCurrentDay(prevMonth, nextMonth, day.day)}`}
                                         >
-                                            {day}
+                                            {setDaysWithHolidays(day.holiday)}
+                                            {day.day}
                                         </span>
                                         <p className={styles.task}></p>
                                     </li>
-                                )
+                                );
                             })
                         }
                     </ul>
                 </div>
             </div>
-            <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]}/>
+            <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]} />
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>

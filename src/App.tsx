@@ -6,15 +6,14 @@ import {Register} from "./components/Register/Register";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import firebase from "firebase/compat";
 import { useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext } from "./AuthContext";
+import { AuthProvider } from "./AuthContext";
+import { auth } from "./firebase-config";
+
 
 
 function App() {
     const {currentUser} = useContext(AuthContext);
-    console.log(currentUser.email)
-    // const RequireAuth = ({ children: JSX.Element }) => {
-    //     return currentUser ? children : <Navigate to="/login" />;
-    // };
 
     return (
         <>
@@ -22,9 +21,15 @@ function App() {
                 <Calendar/>
             </div>
             <div className={'auth'}>
-                <Register />
-                {currentUser && <p>Hello{currentUser}</p>}
-                <Login />
+                {currentUser &&
+                    <div className={'logged-in'}>
+                    <p>{`Welcome, ${currentUser.email}`}</p>
+                    <a className={'sign-out'} onClick={() => auth.signOut()}>Sign Out</a>
+                </div>}
+                {!currentUser && <div className={'log-in'}>
+                    <Register />
+                    <Login />
+                </div>}
             </div>
             {/*<BrowserRouter>*/}
             {/*    <Routes>*/}

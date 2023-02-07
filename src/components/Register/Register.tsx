@@ -3,12 +3,8 @@ import {Modal} from "../Modal/Modal";
 import {Form} from "../Form/Form";
 import styles from "./Register.module.scss";
 import stylesForm from "../Form/Form.module.scss";
-import { NavLink, useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
-import {auth, db} from '../../firebase-config';
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
-import {AuthContext} from "../../AuthContext";
-import {doc, setDoc} from "firebase/firestore";
+import {auth} from '../../firebase-config';
 
 
 export const Register = () => {
@@ -24,11 +20,8 @@ export const Register = () => {
                 const user = userCredential.user;
             })
             .catch((error) => {
-                console.log(error.message);
                 setError(error);
             });
-
-
     }
     return (
         <>

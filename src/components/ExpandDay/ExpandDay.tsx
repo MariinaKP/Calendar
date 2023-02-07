@@ -9,15 +9,6 @@ import {db} from "../../firebase-config";
 import {AuthContext} from "../../AuthContext";
 import { collection } from "firebase/firestore";
 
-
-//Use one which works fine for you
-
-import * as firebase from "firebase/app";
-// import * as firebase from 'firebase';
-
-//Now import this
-import 'firebase/firestore';
-
 type Props = {
     date: number;
     day: string;
@@ -29,7 +20,6 @@ export const ExpandDay = ({ date, day, holiday}:Props) => {
     const [taskDesc, setTaskDesc] = useState('');
     const [taskIsDone, setTaskIsDone] = useState(false);
     const {currentUser} = useContext(AuthContext);
-
 
     const addTask = async (e: any): Promise<void> => {
         e.preventDefault();
@@ -45,13 +35,6 @@ export const ExpandDay = ({ date, day, holiday}:Props) => {
             description: taskDesc,
             isDone: false
         });
-
-        // const taskDocRef = doc(db, `users/${currentUser.uid}/tasks`);
-        // await addDoc(taskDocRef, {
-        //     title: taskTitle,
-        //     description: taskDesc,
-        //     isDone: false
-        // });
     }
     console.log(taskTitle);
     return (

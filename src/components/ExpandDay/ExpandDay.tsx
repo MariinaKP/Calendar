@@ -10,16 +10,18 @@ import {AuthContext} from "../../AuthContext";
 import { collection } from "firebase/firestore";
 
 type Props = {
-    date: number;
-    day: string;
-    holiday?: string;
+    date: Date;
+    // day: string;
+    // holiday?: string;
 }
-export const ExpandDay = ({ date, day, holiday}:Props) => {
+export const ExpandDay = ({ date }: Props ) => {
     const [isOpened, setIsOpened] = useState(false);
     const [taskTitle, setTaskTitle] = useState('');
     const [taskDesc, setTaskDesc] = useState('');
     const [taskIsDone, setTaskIsDone] = useState(false);
     const {currentUser} = useContext(AuthContext);
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const addTask = async (e: any): Promise<void> => {
         e.preventDefault();
@@ -33,18 +35,18 @@ export const ExpandDay = ({ date, day, holiday}:Props) => {
         await addDoc(collection(db, `users/${currentUser.uid}/tasks`), {
             title: taskTitle,
             description: taskDesc,
-            isDone: false
+            isDone: false,
+            taskDate: date
         });
     }
-    console.log(taskTitle);
     return (
         <>
             <div className={styles.expand_day}>
                 <div className={styles.date}>
-                    <h2>{date}</h2>
-                    <h3>{day}</h3>
+                    <h2>{date.getDate()}</h2>
+                    <h3>{daysOfWeek[date.getDay()]}</h3>
                 </div>
-                <p>{holiday}</p>
+                <p>{}</p>
                 <div className={styles.info}>
                     <div>10:03AM</div>
                     <div>Sofia 10C</div>

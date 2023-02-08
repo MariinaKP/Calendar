@@ -11,20 +11,20 @@ import {AuthContext} from "../../AuthContext";
 
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());
-    const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()});
+    // const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()});
+    const [selectedDay, setSelectedDay] = useState(date);
     const [holiday, setHoliday] = useState('');
     let selectedYear = date.getFullYear();
     let selectedMonth = date.getMonth();
     const {currentUser} = useContext(AuthContext);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     type DaysType = {
         day: number;
         month: number;
         holiday?: string;
-        tasks?: [{ title: string; description: string }]
+        tasks?: [{ title: string; description: string; isDone: boolean }]
     };
 
     const days: DaysType[] = [];
@@ -93,21 +93,19 @@ export const Calendar = () => {
         });
     }
 
+    // TODO New name :D
     function setSelectedDayAndDate(prevMonth: boolean, nextMonth: boolean, day: number) {
-        let selectedDayIndex = new Date(selectedYear, selectedMonth, day).getDay();
 
         // if day from the next month is clicked, the selected month is updated to be that month
         if (prevMonth) {
             setDate(new Date(selectedYear, selectedMonth - 1, day));
-            selectedDayIndex = new Date(selectedYear, selectedMonth - 1, day).getDay();
         }
 
         // if day from the prev month is clicked, the selected month is updated to be that month
         if (nextMonth) {
             setDate(new Date(selectedYear, selectedMonth + 1, day));
-            selectedDayIndex = new Date(selectedYear, selectedMonth + 1, day).getDay();
         }
-        setSelectedDay({date: day, day: selectedDayIndex})
+        setSelectedDay(new Date(selectedYear, selectedMonth, day))
     }
 
     function setClassToInactiveDay(prevMonth: boolean, nextMonth: boolean) {
@@ -115,7 +113,7 @@ export const Calendar = () => {
     }
 
     function setClassToSelectedDay(prevMonth: boolean, nextMonth: boolean, day: number) {
-        if (!prevMonth && !nextMonth && day === selectedDay.date) return `${styles.selected_day}`;
+        if (!prevMonth && !nextMonth && day === selectedDay.getDate()) return `${styles.selected_day}`;
     }
 
     function setClassToCurrentDay(prevMonth: boolean, nextMonth: boolean, day: number) {
@@ -131,12 +129,38 @@ export const Calendar = () => {
 
     async function fetchingTasks() {
         const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/tasks`));
+        // allHolidays.forEach((x) => {
+        //     const currMonth = x.start.getMonth();
+        //     const currDay = x.start.getDate();
+        //     const name = x.name;
+        //
+        //     days.forEach((y) => {
+        //         if (y.day === currDay && y.month === currMonth) {
+        //             y.holiday = name;
+        //         }
+        //     });
+        // });
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+            // const taskDate = doc.data().taskDate.getDate();
+            // const taskMonth = doc.data().taskDate.getMonth();
+            // const title = doc.data().title;
+            // const description = doc.data().description;
+            // days.forEach((x) => {
+            //     if (x.day === taskDate && x.month === taskMonth) {
+            //         x.tasks = [{title: title, description: description, isDone: false}];
+            //     }
+            // });
+            // console.log(taskDate);
+            // console.log(taskMonth);
+            // console.log(taskMonth);
+            console.log(doc.id, " => ", doc.data().taskDate.toDate());
+            console.log(doc.id, " => ", doc.data().title);
         });
     }
     fetchingTasks();
 
+    console.log(days);
+    // console.log(selectedDay.getDate());
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -185,7 +209,7 @@ export const Calendar = () => {
                     </ul>
                 </div>
             </div>
-            <ExpandDay date={selectedDay.date} day={daysOfWeek[selectedDay.day]} />
+            <ExpandDay date={selectedDay} />
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>

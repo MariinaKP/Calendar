@@ -12,9 +12,9 @@ import { collection } from "firebase/firestore";
 type Props = {
     date: Date;
     // day: string;
-    // holiday?: string;
+    holiday?: string;
 }
-export const ExpandDay = ({ date }: Props ) => {
+export const ExpandDay = ({ date, holiday }: Props ) => {
     const [isOpened, setIsOpened] = useState(false);
     const [expandTaskIsOpened, setExpandTaskIsOpened] = useState(false);
     const [taskTitle, setTaskTitle] = useState('');
@@ -45,8 +45,8 @@ export const ExpandDay = ({ date }: Props ) => {
                 <div className={styles.date}>
                     <h2>{date.getDate()}</h2>
                     <h3>{daysOfWeek[date.getDay()]}</h3>
+                    <p>{holiday}</p>
                 </div>
-                <p>{}</p>
                 {/*<div className={styles.info}>*/}
                 {/*    <div>10:03AM</div>*/}
                 {/*    <div>Sofia 10C</div>*/}

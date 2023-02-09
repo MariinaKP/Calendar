@@ -25,6 +25,7 @@ export const Calendar = () => {
         tasks?: [{ title: string; description: string; isDone: boolean }]
     };
 
+
     const days: DaysType[] = [];
 
     let lastDay: number;
@@ -113,7 +114,7 @@ export const Calendar = () => {
     }
 
     // TODO New name :D
-    function setSelectedDayAndDate(prevMonth: boolean, nextMonth: boolean, day: number) {
+    function setSelectedDayAndDate(prevMonth: boolean, nextMonth: boolean, day: number, holiday?: string) {
 
         // if day from the next month is clicked, the selected month is updated to be that month
         if (prevMonth) {
@@ -125,6 +126,9 @@ export const Calendar = () => {
             setDate(new Date(selectedYear, selectedMonth + 1, day));
         }
         setSelectedDay(new Date(selectedYear, selectedMonth, day))
+
+        if (holiday !== undefined) setHoliday(holiday)
+        else setHoliday('');
     }
 
     function setClassToInactiveDay(prevMonth: boolean, nextMonth: boolean) {
@@ -147,11 +151,11 @@ export const Calendar = () => {
     }
 
     function setDaysWithTasks(tasks?: [{}]) {
-        if (tasks !== undefined) {
-            tasks.forEach(() => {
-                return <p className={styles.task}></p>;
-            })
-        }
+        // if (tasks !== undefined) {
+        //     tasks.forEach(() => {
+        //         return <p className={styles.task}>task</p>;
+        //     })
+        // }
     }
 
     console.log(days);
@@ -187,13 +191,17 @@ export const Calendar = () => {
                                 return (
                                     <li
                                         className={`${setClassToInactiveDay(prevMonth, nextMonth)} ${setClassToSelectedDay(prevMonth, nextMonth, day.day)}`}
-                                        onClick={() => setSelectedDayAndDate(prevMonth, nextMonth, day.day)}
+                                        onClick={() => setSelectedDayAndDate(prevMonth, nextMonth, day.day, day.holiday)}
                                     >
-                                        <span
-                                            className={`${setClassToCurrentDay(prevMonth, nextMonth, day.day)}`}
-                                        >
+                                        <span className={`${setClassToCurrentDay(prevMonth, nextMonth, day.day)}`}>
                                             {setDaysWithHolidays(day.holiday)}
                                             {day.day}
+                                            {day.tasks?.map(() => {
+                                                return <p className={styles.task}></p>;
+                                            })}
+                                            {/*<>*/}
+                                            {/*    {setDaysWithTasks(day.tasks)}*/}
+                                            {/*</>*/}
                                             {/*<p className={styles.task}></p>*/}
                                         </span>
                                     </li>
@@ -203,9 +211,10 @@ export const Calendar = () => {
                     </ul>
                 </div>
             </div>
-            <ExpandDay date={selectedDay}/>
+            <ExpandDay date={selectedDay} holiday={holiday}/>
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>
     );
-};
+}
+    ;

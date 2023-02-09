@@ -8,10 +8,8 @@ import {collection, getDocs} from "firebase/firestore";
 import {AuthContext} from "../../AuthContext";
 
 
-
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());
-    // const [selectedDay, setSelectedDay] = useState({date: date.getDate(), day: date.getDay()});
     const [selectedDay, setSelectedDay] = useState(date);
     const [holiday, setHoliday] = useState('');
     let selectedYear = date.getFullYear();
@@ -30,8 +28,6 @@ export const Calendar = () => {
     const days: DaysType[] = [];
 
     let lastDay: number;
-    let lastDayIndex: number;
-    let firstDayIndex: number;
     let prevLastDay: number;
     let prevLastDayIndex: number;
 
@@ -40,8 +36,6 @@ export const Calendar = () => {
 
     function renderCalendar() {
         lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-        lastDayIndex = new Date(selectedYear, selectedMonth + 1, 0).getDay();
-        firstDayIndex = new Date(selectedYear, selectedMonth + 1, 1).getDay();
         prevLastDay = new Date(selectedYear, selectedMonth, 0).getDate();
         prevLastDayIndex = new Date(selectedYear, selectedMonth, 0).getDay();
 
@@ -49,6 +43,7 @@ export const Calendar = () => {
         addSelectedMonthDays(lastDay);
         addNextMonthDays();
         addHolidays();
+        fetchingTasks();
     }
 
     renderCalendar();
@@ -79,6 +74,7 @@ export const Calendar = () => {
         }
     }
 
+    // TODO name
     function addHolidays() {
         allHolidays.forEach((x) => {
             const currMonth = x.start.getMonth();
@@ -88,6 +84,29 @@ export const Calendar = () => {
             days.forEach((y) => {
                 if (y.day === currDay && y.month === currMonth) {
                     y.holiday = name;
+                }
+            });
+        });
+    }
+
+    async function fetchingTasks() {
+        const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/tasks`));
+        querySnapshot.forEach((doc) => {
+            const taskDate = doc.data().taskDate.toDate().getDate();
+            const taskMonth = doc.data().taskDate.toDate().getMonth();
+            const title = doc.data().title;
+            const description = doc.data().description;
+            const isDone = doc.data().isDone;
+            days.forEach((x) => {
+                if (x.day === taskDate && x.month === taskMonth) {
+                    // x.tasks = x.tasks = [{title: title, description: description, isDone: isDone}] || [];
+                    // x.tasks.push({title: title, description: description, isDone: isDone});
+
+                    if (x.tasks === undefined) {
+                        x.tasks = [{title: title, description: description, isDone: isDone}];
+                    } else {
+                        x.tasks.push({title: title, description: description, isDone: isDone});
+                    }
                 }
             });
         });
@@ -127,40 +146,15 @@ export const Calendar = () => {
         }
     }
 
-    async function fetchingTasks() {
-        const querySnapshot = await getDocs(collection(db, `users/${currentUser.uid}/tasks`));
-        // allHolidays.forEach((x) => {
-        //     const currMonth = x.start.getMonth();
-        //     const currDay = x.start.getDate();
-        //     const name = x.name;
-        //
-        //     days.forEach((y) => {
-        //         if (y.day === currDay && y.month === currMonth) {
-        //             y.holiday = name;
-        //         }
-        //     });
-        // });
-        querySnapshot.forEach((doc) => {
-            // const taskDate = doc.data().taskDate.getDate();
-            // const taskMonth = doc.data().taskDate.getMonth();
-            // const title = doc.data().title;
-            // const description = doc.data().description;
-            // days.forEach((x) => {
-            //     if (x.day === taskDate && x.month === taskMonth) {
-            //         x.tasks = [{title: title, description: description, isDone: false}];
-            //     }
-            // });
-            // console.log(taskDate);
-            // console.log(taskMonth);
-            // console.log(taskMonth);
-            console.log(doc.id, " => ", doc.data().taskDate.toDate());
-            console.log(doc.id, " => ", doc.data().title);
-        });
+    function setDaysWithTasks(tasks?: [{}]) {
+        if (tasks !== undefined) {
+            tasks.forEach(() => {
+                return <p className={styles.task}></p>;
+            })
+        }
     }
-    fetchingTasks();
 
     console.log(days);
-    // console.log(selectedDay.getDate());
     return (
         <>
             <icons.TfiAngleLeft className={styles.arrow}
@@ -200,8 +194,8 @@ export const Calendar = () => {
                                         >
                                             {setDaysWithHolidays(day.holiday)}
                                             {day.day}
+                                            {/*<p className={styles.task}></p>*/}
                                         </span>
-                                        {/*<p className={styles.task}></p>*/}
                                     </li>
                                 );
                             })
@@ -209,7 +203,7 @@ export const Calendar = () => {
                     </ul>
                 </div>
             </div>
-            <ExpandDay date={selectedDay} />
+            <ExpandDay date={selectedDay}/>
             <icons.TfiAngleRight className={styles.arrow}
                                  onClick={() => setDate(new Date(selectedYear, selectedMonth + 2, 0))}/>
         </>

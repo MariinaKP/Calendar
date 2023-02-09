@@ -31,6 +31,8 @@
     font-size: 14px;
   }
   .tasks {
+    margin: 1rem 0;
+    font-weight: 300;
     &_add {
       display: flex;
       align-items: center;
@@ -44,7 +46,31 @@
       display: flex;
       align-items: center;
     }
+    ul {
+      list-style: disc inside;
+      direction: rtl;
+      font-size: 14px;
+
+      li {
+        margin: 0.5rem 0;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        cursor: pointer;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        &:hover {
+          background: linear-gradient(270deg, rgba(234, 228, 247, 0.34) 3.34%, rgba(234, 228, 247, 0.1224) 103.07%);
+        }
+      }
+    }
   }
 }
 
+.expand_task {
+  background: $c-white;
+  border-radius: 30px;
+  padding: 50px;
+  width: 700px;
+}
 

@@ -16,6 +16,7 @@ type Props = {
 }
 export const ExpandDay = ({ date }: Props ) => {
     const [isOpened, setIsOpened] = useState(false);
+    const [expandTaskIsOpened, setExpandTaskIsOpened] = useState(false);
     const [taskTitle, setTaskTitle] = useState('');
     const [taskDesc, setTaskDesc] = useState('');
     const [taskIsDone, setTaskIsDone] = useState(false);
@@ -26,7 +27,6 @@ export const ExpandDay = ({ date }: Props ) => {
     const addTask = async (e: any): Promise<void> => {
         e.preventDefault();
 
-        // TODO diff between setDoc and addDoc
         const userDocRef = doc(db, "users", currentUser.uid);
         await setDoc(userDocRef, {
             email: currentUser.email
@@ -47,26 +47,48 @@ export const ExpandDay = ({ date }: Props ) => {
                     <h3>{daysOfWeek[date.getDay()]}</h3>
                 </div>
                 <p>{}</p>
-                <div className={styles.info}>
-                    <div>10:03AM</div>
-                    <div>Sofia 10C</div>
-                </div>
+                {/*<div className={styles.info}>*/}
+                {/*    <div>10:03AM</div>*/}
+                {/*    <div>Sofia 10C</div>*/}
+                {/*</div>*/}
                 <div className={styles.tasks}>
                     <div className={styles.tasks_add}>
-                        No tasks
+                        {/*No tasks*/}
                         <div className={styles.tasks_icon} onClick={() => setIsOpened(true)}>
                             <icons.BiPencil/>
                         </div>
                     </div>
-                    <ul></ul>
+                    <ul>
+                        <li onClick={() => setExpandTaskIsOpened(true)}>Lorem ipsum neshto si dfg okd ojr oej j s</li>
+                        <li>Nqkuv task</li>
+                        <li>Lorem ipsum neshto si</li>
+                    </ul>
                 </div>
             </div>
             {isOpened && (
                 <Modal onClose={() => setIsOpened(false)}>
                     <Form title={'Add Task'} button={'Submit'} onClick={addTask}>
-                        <input className={stylesForm.field} type={"text"} placeholder={"Title"} required onChange={(e) => setTaskTitle(e.target.value)}/>
-                        <textarea className={stylesForm.field} placeholder={"Description"} onChange={(e) => setTaskDesc(e.target.value)}/>
+                        <input
+                            className={stylesForm.field} type={"text"}
+                            placeholder={"Title"}
+                            required
+                            onChange={(e) => setTaskTitle(e.target.value)}/>
+                        <textarea
+                            className={stylesForm.field}
+                            placeholder={"Description"}
+                            onChange={(e) => setTaskDesc(e.target.value)}/>
                     </Form>
+                </Modal>
+            )}
+
+            {expandTaskIsOpened && (
+                <Modal onClose={() => setExpandTaskIsOpened(false)}>
+                    <div className={styles.expand_task}>
+                        <h3>Lorem ipsum neshto si</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
                 </Modal>
             )}
         </>

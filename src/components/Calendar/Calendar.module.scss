@@ -60,10 +60,18 @@
     }
 
     .task {
-      padding: 5px;
-      /* width: 100%; */
-      background: $c-main-dark;
+      padding: 3px;
+      background: transparent;
       margin: 5px auto 0 auto;
+      border: 2px solid $c-main;
+      border-radius: 10px;
+    }
+
+    .task_done {
+      padding: 3px;
+      background: $c-main;
+      margin: 5px auto 0 auto;
+      border: 2px solid $c-main;
       border-radius: 10px;
     }
 
@@ -73,12 +81,6 @@
     }
 
     span {
-
-    }
-
-    .current_day {
-      background: $c-main-dark;
-      color: $c-grey;
       width: 25px;
       height: 25px;
       display: flex;
@@ -86,6 +88,11 @@
       justify-content: center;
       border-radius: 50%;
       margin: 0 auto;
+    }
+
+    .current_day {
+      background: $c-main-dark;
+      color: $c-grey;
     }
 
     .star {

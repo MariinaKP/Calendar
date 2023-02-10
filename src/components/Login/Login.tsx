@@ -5,12 +5,16 @@ import styles from "./Login.module.scss";
 import stylesForm from "../Form/Form.module.scss";
 import { signInWithEmailAndPassword, getAuth, signOut} from 'firebase/auth';
 import { auth } from '../../firebase-config';
+import {SuccessMessage} from "../SuccessMessage/SuccessMessage";
+import {AuthContext} from "../../AuthContext";
 
 export const Login = () => {
     const [isOpened, setIsOpened] = useState(false);
+    const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
+    const {currentUser} = useContext(AuthContext);
 
     const onLogin = (e: any): void => {
         e.preventDefault();
@@ -22,12 +26,14 @@ export const Login = () => {
             .catch((error) => {
                 setError(error)
             });
-
+        welcomeMessage();
     };
-
-    const onLogout = () => {
-        signOut(auth);
-    };
+    const welcomeMessage = () => {
+        setIsSuccessMessageVisible(true);
+        setTimeout(() => {
+            setIsSuccessMessageVisible(false);
+        }, 2000);
+    }
 
     return (
         <>
@@ -41,6 +47,7 @@ export const Login = () => {
                     </Form>
                 </Modal>
             )}
+            {isSuccessMessageVisible && <SuccessMessage>Welcome, {currentUser.email}</SuccessMessage>}
         </>
     );
 };

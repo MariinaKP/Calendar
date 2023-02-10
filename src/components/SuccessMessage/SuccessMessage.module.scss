@@ -1,0 +1,12 @@
+@import '../../styles/main.scss';
+
+.success_message {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 300px;
+  background: $c-main-light;
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+}

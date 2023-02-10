@@ -14,10 +14,12 @@
   .date {
     text-align: right;
     border-bottom: 2px solid $c-main-dark;
+
     h2 {
       font-size: 5rem;
       margin-bottom: 0;
     }
+
     h3 {
       font-size: 2rem;
       margin-bottom: 1rem;
@@ -30,15 +32,18 @@
     margin: 0.5rem 0;
     font-size: 14px;
   }
+
   .tasks {
     margin: 1rem 0;
     font-weight: 300;
+
     &_add {
       display: flex;
       align-items: center;
       justify-content: end;
 
     }
+
     &_icon {
       font-size: 20px;
       margin-left: 0.5rem;
@@ -46,6 +51,7 @@
       display: flex;
       align-items: center;
     }
+
     ul {
       list-style: disc inside;
       direction: rtl;
@@ -59,18 +65,48 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+
         &:hover {
           background: linear-gradient(270deg, rgba(234, 228, 247, 0.34) 3.34%, rgba(234, 228, 247, 0.1224) 103.07%);
+        }
+      }
+    }
+
+    .expand_task {
+      background: $c-white;
+      border-radius: 30px;
+      padding: 50px;
+      width: 700px;
+      color: $c-black;
+
+      &_top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h3 {
+          margin: 0;
+        }
+
+        .tick {
+          font-size: 30px;
+          color: $c-main-light;
+          cursor: pointer;
+          transition: 0.6s;
+          &_done {
+            color: $c-main;
+            font-size: 30px;
+            cursor: pointer;
+            transition: 0.6s;
+          }
+          &:hover {
+            color: $c-main;
+          }
         }
       }
     }
   }
 }
 
-.expand_task {
-  background: $c-white;
-  border-radius: 30px;
-  padding: 50px;
-  width: 700px;
-}
 

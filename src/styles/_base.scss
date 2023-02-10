@@ -37,13 +37,9 @@ body {
 }
 
 .auth {
-  //display: flex;
-  //width: 170px;
   position: absolute;
-  //justify-content: space-between;
   top: 10px;
   right: 20px;
-  //font-size: 14px;
   .log-in {
     display: flex;
     button {
@@ -51,6 +47,12 @@ body {
       font-size: 14px;
       margin-left: .5rem;
     }
+  }
+  .logged-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
   }
 }
 

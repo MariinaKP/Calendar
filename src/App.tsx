@@ -20,7 +20,7 @@ function App() {
       <div className={'auth'}>
         {currentUser &&
             <div className={'logged-in'}>
-                {/*<p>{`Welcome, ${currentUser.email}`}</p>*/}
+                <p>{`Welcome, ${currentUser.email}`}</p>
                 <icons.GoSignOut />
               <a className={'sign-out'} onClick={() => auth.signOut()}>Sign Out</a>
             </div>}

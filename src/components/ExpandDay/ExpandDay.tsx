@@ -22,8 +22,9 @@ type Props = {
   // day: string;
   holiday?: string;
   tasks?: Task[];
+  onSubmit: (tasks: Task[]) => void;
 }
-export const ExpandDay = ({date, holiday, tasks}: Props) => {
+export const ExpandDay = ({date, holiday, tasks, onSubmit}: Props) => {
   const [addTaskIsOpened, setAddTaskIsOpened] = useState(false);
   const [expandTaskIsOpened, setExpandTaskIsOpened] = useState(false);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
@@ -36,6 +37,7 @@ export const ExpandDay = ({date, holiday, tasks}: Props) => {
 
   const addTask = async (e: any): Promise<void> => {
     e.preventDefault();
+
 
     // try {
     const userDocRef = doc(db, "users", currentUser.uid);
@@ -56,10 +58,12 @@ export const ExpandDay = ({date, holiday, tasks}: Props) => {
     )
 
     setAddTaskIsOpened(false);
-    // welcomeMessage();
+    welcomeMessage();
     // } catch (err) {
     //     console.log(err);
     // }
+
+    onSubmit(tasks || []);
   }
 
   const updateTaskAsDone = async (task: string) => {
@@ -90,7 +94,6 @@ export const ExpandDay = ({date, holiday, tasks}: Props) => {
             </div>
           </div>
           {tasks?.map(task => {
-            // @ts-ignore
             return (
               <>
                 <ul>

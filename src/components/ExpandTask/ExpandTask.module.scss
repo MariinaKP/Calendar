@@ -1,0 +1,38 @@
+@import '../../styles/main.scss';
+
+.expand_task {
+  background: $c-white;
+  border-radius: 30px;
+  padding: 50px;
+  width: 700px;
+  color: $c-black;
+
+  &_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+    }
+
+    .tick {
+      font-size: 30px;
+      color: $c-main-light;
+      cursor: pointer;
+      transition: 0.6s;
+
+      &_done {
+        color: $c-main;
+        font-size: 30px;
+        cursor: pointer;
+        transition: 0.6s;
+      }
+
+      &:hover {
+        color: $c-main;
+      }
+    }
+  }
+}

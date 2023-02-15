@@ -26,6 +26,7 @@ export const Register = () => {
       .catch((error) => {
         setError(error);
       });
+
     welcomeMessage();
   }
 
@@ -49,7 +50,7 @@ export const Register = () => {
           </Form>
         </Modal>
       )}
-      {isSuccessMessageVisible && <SuccessMessage>Welcome, {currentUser.email}</SuccessMessage>}
+      {isSuccessMessageVisible && <SuccessMessage>Welcome</SuccessMessage>}
     </>
   );
 };

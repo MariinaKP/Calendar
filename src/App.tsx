@@ -4,16 +4,17 @@ import {Calendar} from "./components/Calendar/Calendar";
 import {Login} from "./components/Login/Login";
 import {Register} from "./components/Register/Register";
 import {useContext} from "react";
-import {AuthContext} from "./AuthContext";
+import {AuthContext, AuthProvider} from "./AuthContext";
 import {auth} from "./firebase-config";
 import {icons} from "./assets/icons";
 
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+  console.log(currentUser);
 
   return (
-    <>
+    <AuthProvider>
       <div className={'wrapper'}>
         <Calendar/>
       </div>
@@ -29,7 +30,7 @@ function App() {
             <Login/>
         </div>}
       </div>
-    </>
+    </AuthProvider>
   );
 }
 

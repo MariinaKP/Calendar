@@ -12,7 +12,7 @@ import {collection} from "firebase/firestore";
 import {SuccessMessage} from "../SuccessMessage/SuccessMessage";
 
 type Task = {
-  id?: string;
+  id: string;
   title: string;
   description: string;
   isDone: boolean;
@@ -28,14 +28,15 @@ type Props = {
 }
 
 export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
-  const [addTaskIsOpened, setAddTaskIsOpened] = useState(false);
+  const [IsOpened, setIsOpened] = useState(false);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDesc, setTaskDesc] = useState('');
   const [taskIsDone, setTaskIsDone] = useState(false);
-  const [addedTask, setAddedTask] = useState<Task[]>([]);
+  const [addedTask, setAddedTask] = useState<[{}]>([{}]);
   const [error, setError] = useState('');
   const {currentUser} = useContext(AuthContext);
+
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   const addTask = async (e: any): Promise<void> => {
@@ -43,41 +44,34 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
 
     if (validation()) {
       setAddedTask([{title: taskTitle, description: taskDesc, isDone: taskIsDone}])
-      setAddTaskIsOpened(false);
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await setDoc(userDocRef, {
+        email: currentUser.email
+      });
+
+      const taskDocRef = doc(collection(db, `users/${currentUser.uid}/tasks`));
+      await setDoc(
+        taskDocRef,
+        {
+          title: taskTitle,
+          description: taskDesc,
+          isDone: false,
+          taskDate: date,
+          id: taskDocRef.id
+        }
+      )
+      setIsOpened(false);
       addedTaskMessage();
       onAddedTask();
     } else {
       setError('Title must be longer than 0 and shorter than 20.');
     }
   }
-  useEffect(() => {
-    addedTask2();
-  }, [addedTask])
 
-  console.log(addedTask);
-  const addedTask2 = async () => {
-    const userDocRef = doc(db, "users", currentUser.uid);
-    await setDoc(userDocRef, {
-      email: currentUser.email
-    });
-
-    const taskDocRef = doc(collection(db, `users/${currentUser.uid}/tasks`));
-    await setDoc(
-      taskDocRef,
-      {
-        title: taskTitle,
-        description: taskDesc,
-        isDone: false,
-        taskDate: date,
-        id: taskDocRef.id
-      }
-    )
-  }
   const validation = () => {
     return taskTitle.length > 0 && taskTitle.length <= 20;
   }
 
-  console.log(validation());
   const addedTaskMessage = () => {
     setIsSuccessMessageVisible(true);
     setTimeout(() => {
@@ -96,18 +90,20 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
         <div className={styles.tasks}>
           <div className={styles.tasks_add}>
             Add Task
-            <div className={styles.tasks_icon} onClick={() => setAddTaskIsOpened(true)}>
+            <div className={styles.tasks_icon} onClick={() => setIsOpened(true)}>
               <icons.BiPencil/>
             </div>
           </div>
-          {tasks?.map(task => {
-            return (<ExpandTask task={task} onAddedTask={onAddedTask}/>)
-          })}
+          <ul>
+            {tasks?.map(task => {
+              return (<ExpandTask key={task.id} task={task} onAddedTask={onAddedTask}/>)
+            })}
+          </ul>
         </div>
       </div>
-      {addTaskIsOpened && (
-        <Modal onClose={() => setAddTaskIsOpened(false)}>
-          <Form title={'Add ExpandTask'} button={'Submit'} onClick={addTask}>
+      {IsOpened && (
+        <Modal onClose={() => setIsOpened(false)}>
+          <Form title={'Add Task'} button={'Submit'} onClick={addTask}>
             <input
               className={stylesForm.field}
               type={"text"}

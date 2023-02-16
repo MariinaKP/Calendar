@@ -53,6 +53,9 @@ body {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    p {
+      margin-right: 0.5rem;
+    }
   }
 }
 
@@ -126,4 +129,19 @@ p {
 ul,
 ol {
   list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  border: 1px solid $c-main-light;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background: $c-main-light;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background: $c-main-dark;
 }

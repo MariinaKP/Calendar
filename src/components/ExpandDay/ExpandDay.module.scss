@@ -56,6 +56,9 @@
       list-style: disc inside;
       direction: rtl;
       font-size: 14px;
+      margin-top: 1rem;
+      max-height: 150px;
+      overflow-x: hidden;
 
       li {
         margin: 0.5rem 0;

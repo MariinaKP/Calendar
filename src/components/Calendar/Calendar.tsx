@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {ExpandDay} from "../ExpandDay/ExpandDay";
 import {collection, getDocs} from "firebase/firestore";
 import {icons} from "../../assets/icons";
@@ -6,15 +6,14 @@ import styles from "./Calendar.module.scss";
 import holidays from 'date-holidays';
 import {db} from "../../firebase-config";
 import {AuthContext} from "../../AuthContext";
-import {SuccessMessage} from "../SuccessMessage/SuccessMessage";
 
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());
+    const selectedYear = date.getFullYear();
+    const selectedMonth = date.getMonth();
     const [selectedDate, setSelectedDate] = useState(date);
     const [currDayHoliday, setCurrDayHoliday] = useState('');
     const [currDayTasks, setCurrDayTasks] = useState<Task[]>([]);
-    let selectedYear = date.getFullYear();
-    let selectedMonth = date.getMonth();
     const {currentUser} = useContext(AuthContext);
     const [addedTask, setAddedTask] = useState(false);
 
@@ -37,18 +36,15 @@ export const Calendar = () => {
     const [days, setDays] = useState<DaysType[]>([]);
 
     let lastDay: number;
-    let prevLastDay: number;
-    let prevLastDayIndex: number;
-
-    const bgHolidays = new holidays('BG');
-    const allHolidays = bgHolidays.getHolidays();
+    let prevMonthLastDay: number;
+    let prevMonthLastDayIndex: number;
 
     async function renderCalendar() {
       lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-      prevLastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-      prevLastDayIndex = new Date(selectedYear, selectedMonth, 0).getDay();
+      prevMonthLastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+      prevMonthLastDayIndex = new Date(selectedYear, selectedMonth, 0).getDay();
 
-      let days = addPrevMonthDays(prevLastDay);
+      let days = addPrevMonthDays(prevMonthLastDay);
       days = [...days, ...addSelectedMonthDays(lastDay)];
       days = [...days, ...addNextMonthDays(days.length)];
       days = fetchingHolidays(days);
@@ -60,15 +56,13 @@ export const Calendar = () => {
       renderCalendar();
     }, [date, currentUser, addedTask]);
 
-
-
-    function addPrevMonthDays(prevLastDay: number) {
-      let firstDayOfWeek = prevLastDayIndex;
-      prevLastDay -= prevLastDayIndex;
+    function addPrevMonthDays(prevMonthLastDay: number) {
+      let firstDayOfWeek = prevMonthLastDayIndex;
+      prevMonthLastDay -= prevMonthLastDayIndex;
 
       const days = [];
       for (let i = 0; i <= firstDayOfWeek; i++) {
-        const day = {day: prevLastDay++, month: selectedMonth === 0 ? 11 : selectedMonth - 1};
+        const day = {day: prevMonthLastDay++, month: selectedMonth === 0 ? 11 : selectedMonth - 1};
         days.push(day);
       }
       return days;
@@ -94,6 +88,8 @@ export const Calendar = () => {
       return days;
     }
 
+    const bgHolidays = new holidays('BG');
+    const allHolidays = bgHolidays.getHolidays();
     const fetchingHolidays = (days: DaysType[]) => {
       allHolidays.forEach((x) => {
         const currMonth = x.start.getMonth();
@@ -132,12 +128,10 @@ export const Calendar = () => {
     }
 
     const setSelectedDay = (prevMonth: boolean, nextMonth: boolean, day: number, holiday?: string, tasks?: Task[]) => {
-      // if day from the next month is clicked, the selected month is updated to be that month
       if (prevMonth) {
         setDate(new Date(selectedYear, selectedMonth - 1, day));
       }
 
-      // if day from the prev month is clicked, the selected month is updated to be that month
       if (nextMonth) {
         setDate(new Date(selectedYear, selectedMonth + 1, day));
       }
@@ -203,13 +197,13 @@ export const Calendar = () => {
                     prevMonth = true;
                   }
 
-                  let remaing = day.tasks?.filter((element, index) => index >= 2).length;
+                  const remaining = day.tasks?.filter((element, index) => index >= 2).length;
 
                   return (
                     <li
                       className={`${setClassToInactiveDay(prevMonth, nextMonth)} ${setClassToSelectedDay(prevMonth, nextMonth, day.day)}`}
                       onClick={() => setSelectedDay(prevMonth, nextMonth, day.day, day.holiday, day.tasks)}
-                      key={day.day.toString()+day.month.toString()}
+                      key={day.day.toString() + day.month.toString()}
                     >
                       <span className={`${setClassToCurrentDay(prevMonth, nextMonth, day.day)}`}>
                         {setDaysWithHolidays(day.holiday)}
@@ -224,7 +218,8 @@ export const Calendar = () => {
                           }
                         }
                       })}
-                      <p className={styles.task_more}>{remaing !== undefined && remaing !== 0 ? `${remaing} more` : ''}</p>
+                      <p
+                        className={styles.task_more}>{remaining !== undefined && remaining !== 0 ? `${remaining} more` : ''}</p>
                     </li>
                   );
                 })

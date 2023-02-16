@@ -1,11 +1,10 @@
 import React, {useContext, useState} from "react";
 import {Modal} from "../Modal/Modal";
 import {Form} from "../Form/Form";
-import styles from "./Login.module.scss";
 import stylesForm from "../Form/Form.module.scss";
 import {signInWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../../firebase-config';
 import {SuccessMessage} from "../SuccessMessage/SuccessMessage";
+import {auth} from '../../firebase-config';
 import {AuthContext} from "../../AuthContext";
 
 export const Login = () => {
@@ -13,7 +12,7 @@ export const Login = () => {
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const {currentUser} = useContext(AuthContext);
 
   const onLogin = (e: any): void => {
@@ -24,7 +23,7 @@ export const Login = () => {
         setIsOpened(false);
       })
       .catch((error) => {
-        setError(error)
+        setError('Wrong email or password');
       });
   };
   const welcomeMessage = () => {
@@ -36,7 +35,7 @@ export const Login = () => {
 
   return (
     <>
-      <button className={`${styles.login_btn} btn`} onClick={() => setIsOpened(true)}>Login</button>
+      <button className={'btn'} onClick={() => setIsOpened(true)}>Login</button>
       {isOpened && (
         <Modal onClose={() => setIsOpened(false)}>
           <Form title={'Login'} button={'Login'} onClick={onLogin}>
@@ -44,7 +43,7 @@ export const Login = () => {
                    onChange={(e) => setEmail(e.target.value)}/>
             <input className={stylesForm.field} type={"password"} placeholder={"Password"} required
                    onChange={(e) => setPassword(e.target.value)}/>
-            {error && <span className={'error'}>Wrong email or password</span>}
+            <span className={'error'}>{error}</span>
           </Form>
         </Modal>
       )}

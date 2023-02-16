@@ -1,6 +1,5 @@
 import styles from "./SuccessMessage.module.scss";
 
-
 type Props = {
   children: React.ReactNode;
 };

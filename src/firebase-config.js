@@ -5,7 +5,7 @@ import { connectFirestoreEmulator } from "firebase/firestore";
 
 // TODO env variables
 const firebaseConfig = {
-    apiKey: "AIzaSyBmIABp4_IgB7Xm4rBTWLnW-UGB5TW5D9I",
+    apiKey: process.env.REACT_APP_API_KEY,
     authDomain: "calendar-4c102.firebaseapp.com",
     projectId: "calendar-4c102",
     storageBucket: "calendar-4c102.appspot.com",

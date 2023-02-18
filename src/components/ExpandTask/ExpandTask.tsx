@@ -37,7 +37,6 @@ export const ExpandTask = ({ task, onAddedTask }: Props) => {
 
   return (
     <>
-      {/*<ul>*/}
         <li
           className={taskIsDone ? `${styles.task_done}` : ''}
           key={task.id}
@@ -45,7 +44,6 @@ export const ExpandTask = ({ task, onAddedTask }: Props) => {
         >
           {task.title}
         </li>
-      {/*</ul>*/}
       {IsOpened && (
         <Modal onClose={() => setIsOpened(false)}>
           <div className={styles.expand_task}>

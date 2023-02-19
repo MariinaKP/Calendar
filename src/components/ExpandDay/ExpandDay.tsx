@@ -30,6 +30,7 @@ type Props = {
 export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
   const [IsOpened, setIsOpened] = useState(false);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
+  const [addedTaskSuccessfully, setAddedTaskSuccessfully] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDesc, setTaskDesc] = useState('');
   const [taskIsDone, setTaskIsDone] = useState(false);
@@ -79,6 +80,13 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
     }, 2000);
   }
 
+  const errorMessage = () => {
+    setAddedTaskSuccessfully(true);
+    setTimeout(() => {
+      setAddedTaskSuccessfully(false);
+    }, 2000);
+  }
+
   return (
     <>
       <div className={styles.expand_day}>
@@ -90,7 +98,14 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
         <div className={styles.tasks}>
           <div className={styles.tasks_add}>
             Add Task
-            <div className={styles.tasks_icon} onClick={() => setIsOpened(true)}>
+            <div className={styles.tasks_icon} onClick={() => {
+              if(!currentUser) {
+                errorMessage();
+              } else {
+                setIsOpened(true);
+              }
+
+            }}>
               <icons.BiPencil/>
             </div>
           </div>
@@ -122,6 +137,7 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
         </Modal>
       )}
       {isSuccessMessageVisible && <SuccessMessage>Task Added Successfully</SuccessMessage>}
+      {addedTaskSuccessfully && <SuccessMessage>You have to be logged in.</SuccessMessage>}
     </>
   );
 }

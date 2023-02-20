@@ -1,8 +1,8 @@
 import styles from "./ExpandTask.module.scss";
 import {Modal} from "../Modal/Modal";
 import {icons} from "../../assets/icons";
-import React, {useContext, useEffect, useState} from "react";
-import {doc, updateDoc, getDoc} from "firebase/firestore";
+import React, {useContext, useState} from "react";
+import {doc, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase-config";
 import {AuthContext} from "../../AuthContext";
 

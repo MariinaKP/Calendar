@@ -10,11 +10,9 @@ import {AuthContext} from "../../AuthContext";
 
 export const Register = () => {
   const [isOpened, setIsOpened] = useState(false);
-  const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const {currentUser} = useContext(AuthContext);
   const onSubmit = async (e: any): Promise<void> => {
     e.preventDefault()
 
@@ -26,15 +24,6 @@ export const Register = () => {
         if(error.message === 'Firebase: Error (auth/invalid-email).') setError('Invalid email!');
         if(error.message === 'Firebase: Error (auth/email-already-in-use).') setError('Email already used!');
       });
-
-    welcomeMessage();
-  }
-
-  const welcomeMessage = () => {
-    setIsSuccessMessageVisible(true);
-    setTimeout(() => {
-      setIsSuccessMessageVisible(false);
-    }, 2000);
   }
 
   return (
@@ -51,7 +40,6 @@ export const Register = () => {
           </Form>
         </Modal>
       )}
-      {isSuccessMessageVisible && <SuccessMessage>Welcome</SuccessMessage>}
     </>
   );
 };

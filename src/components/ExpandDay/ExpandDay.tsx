@@ -20,9 +20,7 @@ type Task = {
 
 type Props = {
   date: Date;
-  // day: string;
   holiday?: string;
-  // tasks?: ExpandTask[];
   onAddedTask: () => void;
   tasks?: Task[];
 }

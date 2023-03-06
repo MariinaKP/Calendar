@@ -9,7 +9,6 @@ import {AuthContext, AuthProvider} from "./context/AuthContext";
 import {auth} from "./firebase-config";
 import {icons} from "./assets/icons";
 import {ThemeContext} from "./context/ThemeContext";
-import {Auth} from "./components/Auth/Auth";
 
 
 function App() {

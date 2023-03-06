@@ -1,15 +1,10 @@
-@import '../../styles/main.scss';
-
 .form {
-  background: $c-white;
-  border-radius: 30px;
-  padding: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   h4 {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
   &_fields{
@@ -18,15 +13,15 @@
     width: 300px;
     .field {
       width: 100%;
-      border: 2px solid $c-grey;
+      border: 2px solid var(--c-grey);
       border-radius: 20px;
       padding: 5px 15px;
       outline: none;
-      transition: all $t-duration;
+      transition: all var(--t-duration);
       margin-bottom: 1rem;
 
       &:focus {
-        border: 2px solid $c-main;
+        border: 2px solid var(--c-main);
       }
     }
   }

@@ -4,7 +4,7 @@ import {icons} from "../../assets/icons";
 import React, {useContext, useState} from "react";
 import {doc, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase-config";
-import {AuthContext} from "../../AuthContext";
+import {AuthContext} from "../../context/AuthContext";
 
 type Task = {
   id: string;

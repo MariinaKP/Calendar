@@ -5,7 +5,7 @@ import {icons} from "../../assets/icons";
 import styles from "./Calendar.module.scss";
 import holidays from 'date-holidays';
 import {db} from "../../firebase-config";
-import {AuthContext} from "../../AuthContext";
+import {AuthContext} from "../../context/AuthContext";
 
 export const Calendar = () => {
     const [date, setDate] = useState(new Date());

@@ -1,16 +1,47 @@
-$font-size-base: 1rem;
-$font-weight-base: 300;
-$line-height-base: 1.2;
+:root {
+  --f-size-base: 1rem;
+  --f-weight-base: 300;
+  --line-height-base: 1.2;
 
-$ff-head: 'Montserrat', sans-serif;
-$ff-main: 'Montserrat', sans-serif;
+  --ff-head: 'Montserrat', sans-serif;
+  --ff-main: 'Montserrat', sans-serif;
 
-$t-duration: 0.4s;
+  --c-black: #303030;
+  --c-white: #FFFFFF;
+  --c-grey: #F9F9F9;
+  --c-dark-grey: #BFBFBF;
+  --c-red: #be0101;
 
-$c-black: #303030;
-$c-grey: #F9F9F9;
-$c-white: #FFFFFF;
-$c-main: #25ACAC;
-$c-main-light: #C4E6E6;
-$c-main-dark: #0C8282;
-$c-red: #be0101;
+  --t-duration: 0.4s;
+}
+
+
+[data-theme='green'] {
+  --c-main: #25ACAC;
+  --c-main-light: #C4E6E6;
+  --c-main-dark: #0C8282;
+}
+
+[data-theme='blue'] {
+  --c-main: #70A9FF;
+  --c-main-light: #BAD4FC;
+  --c-main-dark: #0B469F;
+}
+
+[data-theme='orange'] {
+  --c-main: #FFA34F;
+  --c-main-light: #FFDFC2;
+  --c-main-dark: #DA7314;
+}
+
+[data-theme='pink'] {
+  --c-main: #FF7BC2;
+  --c-main-light: #FFC3E4;
+  --c-main-dark: #C8006C;
+}
+
+[data-theme='purple'] {
+  --c-main: #C9AFFF;
+  --c-main-light: #EDE7FA;
+  --c-main-dark: #964FDE;
+}

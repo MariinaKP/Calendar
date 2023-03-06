@@ -1,11 +1,6 @@
-@import '../../styles/main.scss';
-
 .expand_task {
-  background: $c-white;
-  border-radius: 30px;
-  padding: 50px;
   width: 700px;
-  color: $c-black;
+  color: var(--c-black);
 
   &_top {
     display: flex;
@@ -19,19 +14,19 @@
 
     .tick {
       font-size: 30px;
-      color: $c-main-light;
+      color: var(--c-main-light);
       cursor: pointer;
       transition: 0.6s;
 
       &_done {
-        color: $c-main;
+        color: var(--c-main);
         font-size: 30px;
         cursor: pointer;
         transition: 0.6s;
       }
 
       &:hover {
-        color: $c-main;
+        color: var(--c-main);
       }
     }
   }

@@ -1,11 +1,9 @@
-@import '../../styles/main.scss';
-
 .success_message {
   position: fixed;
-  bottom: 5px;
-  right: 5px;
+  bottom: 10px;
+  right: 10px;
   width: 300px;
-  background: $c-main-light;
+  background: var(--c-main-light);
   padding: 2rem;
   border-radius: 20px;
   text-align: center;

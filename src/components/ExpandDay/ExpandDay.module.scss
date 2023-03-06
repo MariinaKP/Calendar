@@ -1,19 +1,18 @@
-@import '../../styles/main.scss';
-
 .expand_day {
   width: 350px;
   height: 550px;
   padding: 80px 70px;
-  background: $c-main;
-  color: $c-grey;
+  background-color: var(--c-main);
+  color: var(--c-grey);
   font-weight: bold;
   border-radius: 0 50px 50px 0;
   display: flex;
   flex-direction: column;
+  transition: background-color var(--t-duration);
 
   .date {
     text-align: right;
-    border-bottom: 2px solid $c-main-dark;
+    border-bottom: 2px solid var(--c-main-dark);
 
     h2 {
       font-size: 5rem;

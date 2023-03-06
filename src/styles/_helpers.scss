@@ -3,17 +3,78 @@
   text-align: center;
   padding: 0.5rem 1rem;
   width: 100%;
-  color: $c-white;
+  color: var(--c-white);
   cursor: pointer;
-  transition: background-color $t-duration;
-  background-color: $c-main;
+  transition: background-color var(--t-duration);
+  background-color: var(--c-main);
   border-radius: 30px;
 
   &:hover {
-    background-color: $c-main-light;
+    background-color: var(--c-main-dark);
   }
 
   &:active {
     transform: scale(0.9);
   }
+}
+
+.blue {
+  background: #70A9FF;
+}
+
+.pink {
+  background: #FF7BC2;
+}
+
+.orange {
+  background: #FFA34F;
+}
+
+.green {
+  background: #25ACAC;
+}
+
+.purple {
+  background: #C9AFFF;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.auth {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  .log-in {
+    display: flex;
+    button {
+      width: 100px;
+      font-size: 14px;
+      margin-left: .5rem;
+    }
+  }
+  .logged-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    p {
+      margin-right: 0.5rem;
+    }
+    .sign-out {
+      cursor: pointer;
+      &:hover {
+        color: var(--c-main);
+        transition: color var(--t-duration);
+      }
+    }
+  }
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  color: var(--c-red);
+  margin-bottom: 1rem;
 }

@@ -7,7 +7,7 @@ import styles from "./ExpandDay.module.scss";
 import stylesForm from "../Form/Form.module.scss";
 import {doc, setDoc} from "firebase/firestore";
 import {db} from "../../firebase-config";
-import {AuthContext} from "../../AuthContext";
+import {AuthContext} from "../../context/AuthContext";
 import {collection} from "firebase/firestore";
 import {SuccessMessage} from "../SuccessMessage/SuccessMessage";
 
@@ -116,17 +116,17 @@ export const ExpandDay = ({date, holiday, tasks, onAddedTask}: Props) => {
       </div>
       {IsOpened && (
         <Modal onClose={() => setIsOpened(false)}>
-          <Form title={'Add Task'} button={'Submit'} onClick={addTask}>
+          <Form title={'Add Task'} button={'Add'} onClick={addTask}>
             <input
               className={stylesForm.field}
               type={"text"}
               placeholder={"Title"}
               required
-              onChange={(e) => {
-                setTaskTitle(e.target.value);
-              }
-              }/>
-            <p className={'error'}>{error}</p>
+              onChange={(e) => setTaskTitle(e.target.value)}/>
+            {error && <div className={'error'}>
+                <icons.BiError/>
+                <span>{error}</span>
+            </div>}
             <textarea
               className={stylesForm.field}
               placeholder={"Description"}

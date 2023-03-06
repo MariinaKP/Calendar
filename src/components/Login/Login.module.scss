@@ -1,0 +1,16 @@
+.login {
+  //background-color: $c-white;
+  //border-radius: 30px;
+  //padding: 50px;
+  .register_link {
+    display: flex;
+    justify-content: center;
+    margin-top: .5rem;
+    font-size: 14px;
+    a {
+      margin-left: 5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  }
+}
